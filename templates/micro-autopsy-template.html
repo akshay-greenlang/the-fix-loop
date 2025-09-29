@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Fix Loop | Micro-Autopsy #001</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
+        
+        :root {
+            --blood-red: #DC2626;
+            --success-green: #10B981;
+            --warning-amber: #F59E0B;
+            --electric-blue: #3B82F6;
+            --pure-white: #FFFFFF;
+            --off-white: #FAFAFA;
+            --light-gray: #F3F4F6;
+            --medium-gray: #9CA3AF;
+            --dark-gray: #374151;
+            --darker-gray: #1F2937;
+            --black: #000000;
+            --code-bg: #0F172A;
+            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--off-white);
+            color: var(--darker-gray);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Newsletter Container */
+        .newsletter-wrapper {
+            background: linear-gradient(180deg, var(--black) 0%, var(--darker-gray) 100%);
+            padding: 2rem 0 0 0;
+        }
+
+        .newsletter-container {
+            max-width: 680px;
+            margin: 0 auto;
+            background: var(--pure-white);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Header with Logo */
+        .newsletter-header {
+            background: var(--black);
+            color: var(--pure-white);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .newsletter-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 200%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10px,
+                rgba(220, 38, 38, 0.03) 10px,
+                rgba(220, 38, 38, 0.03) 20px
+            );
+            animation: scan 10s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(50%); }
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo .fix {
+            color: var(--blood-red);
+        }
+
+        .tagline {
+            font-size: 0.875rem;
+            color: var(--medium-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Issue Number Badge */
+        .issue-badge {
+            background: var(--blood-red);
+            color: var(--pure-white);
+            padding: 0.5rem 1.5rem;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            display: inline-block;
+            margin: 2rem auto;
+            position: relative;
+        }
+
+        .issue-badge::before,
+        .issue-badge::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--light-gray), transparent);
+        }
+
+        .issue-badge::before {
+            right: calc(100% + 1rem);
+        }
+
+        .issue-badge::after {
+            left: calc(100% + 1rem);
+        }
+
+        /* Main Content Area */
+        .content-wrapper {
+            padding: 0 2rem 2rem;
+        }
+
+        /* Hero Title Section */
+        .hero-section {
+            text-align: center;
+            padding: 0 0 3rem 0;
+        }
+
+        .failure-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--black);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .failure-title .highlight {
+            background: linear-gradient(90deg, var(--blood-red), var(--warning-amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Impact Stats Bar */
+        .impact-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1px;
+            background: var(--light-gray);
+            border: 1px solid var(--light-gray);
+            margin: 2rem -2rem;
+        }
+
+        .impact-stat {
+            background: var(--pure-white);
+            padding: 1.5rem 1rem;
+            text-align: center;
+        }
+
+        .impact-number {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--blood-red);
+            line-height: 1;
+        }
+
+        .impact-label {
+            font-size: 0.75rem;
+            color: var(--medium-gray);
+            text-transform: uppercase;
+            margin-top: 0.25rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* The Big Reveal Section */
+        .big-reveal {
+            background: linear-gradient(135deg, var(--black) 0%, var(--darker-gray) 100%);
+            color: var(--pure-white);
+            padding: 3rem 2rem;
+            margin: 3rem -2rem;
+            position: relative;
+        }
+
+        .big-reveal::before {
+            content: '⚠️';
+            position: absolute;
+            top: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            background: var(--pure-white);
+            padding: 0 1rem;
+        }
+
+        .reveal-grid {
+            display: grid;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .reveal-item {
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .reveal-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--blood-red);
+        }
+
+        .reveal-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            color: var(--medium-gray);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .reveal-content {
+            font-size: 1.125rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        /* FAILSAFE Analysis Cards */
+        .failsafe-section {
+            margin: 3rem 0;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--black);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title .badge {
+            background: var(--electric-blue);
+            color: var(--pure-white);
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .failsafe-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .failsafe-card {
+            background: var(--light-gray);
+            border-left: 4px solid var(--electric-blue);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .failsafe-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow);
+        }
+
+        .failsafe-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            background: var(--electric-blue);
+            color: var(--pure-white);
+            font-weight: 900;
+            margin-right: 0.75rem;
+            font-size: 1.125rem;
+        }
+
+        .failsafe-title {
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .failsafe-content {
+            color: var(--dark-gray);
+            padding-left: 2.75rem;
+        }
+
+        /* Timeline Visual */
+        .timeline-section {
+            margin: 3rem 0;
+        }
+
+        .timeline-visual {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 2rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--blood-red) 0%, var(--success-green) 100%);
+        }
+
+        .timeline-event {
+            position: relative;
+            padding-left: 4rem;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 1.25rem;
+            top: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--pure-white);
+            border: 3px solid var(--blood-red);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-event:last-child .timeline-marker {
+            border-color: var(--success-green);
+            background: var(--success-green);
+        }
+
+        .timeline-event:hover .timeline-marker {
+            transform: scale(1.3);
+        }
+
+        .timeline-time {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--blood-red);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-description {
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-detail {
+            color: var(--dark-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Code Comparison */
+        .code-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 640px) {
+            .code-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .code-block.broken {
+            border: 2px solid var(--blood-red);
+        }
+
+        .code-block.fixed {
+            border: 2px solid var(--success-green);
+        }
+
+        .code-header {
+            padding: 1rem;
+            font-weight: 700;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .code-block.broken .code-header {
+            background: var(--blood-red);
+            color: var(--pure-white);
+        }
+
+        .code-block.fixed .code-header {
+            background: var(--success-green);
+            color: var(--pure-white);
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        pre {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--light-gray);
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--pure-white);
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Evidence Cards */
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .evidence-card {
+            background: var(--pure-white);
+            border: 2px solid var(--light-gray);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .evidence-card:hover {
+            border-color: var(--blood-red);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        .evidence-metric {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--blood-red), var(--warning-amber));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .evidence-label {
+            font-size: 0.875rem;
+            color: var(--medium-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.5rem;
+        }
+
+        /* Fix Implementation Steps */
+        .fix-steps {
+            background: linear-gradient(135deg, var(--success-green), var(--electric-blue));
+            color: var(--pure-white);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .fix-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+        }
+
+        .fix-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2rem;
+            height: 2rem;
+            background: var(--pure-white);
+            color: var(--success-green);
+            font-weight: 900;
+            border-radius: 50%;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-description {
+            opacity: 0.95;
+            font-size: 0.95rem;
+        }
+
+        /* Lessons Learned */
+        .lessons-box {
+            background: var(--light-gray);
+            border-left: 4px solid var(--warning-amber);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .lesson-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 0.75rem;
+        }
+
+        .lesson-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .lesson-icon {
+            color: var(--warning-amber);
+            font-size: 1.25rem;
+            line-height: 1.5;
+        }
+
+        .lesson-text {
+            flex: 1;
+            line-height: 1.6;
+        }
+
+        .lesson-text strong {
+            color: var(--black);
+            font-weight: 700;
+        }
+
+        /* Download Asset CTA */
+        .asset-cta {
+            background: linear-gradient(135deg, var(--electric-blue), var(--darker-gray));
+            padding: 3rem 2rem;
+            margin: 3rem -2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .asset-cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.03) 10px,
+                rgba(255, 255, 255, 0.03) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .asset-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--pure-white);
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .asset-description {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: var(--pure-white);
+            color: var(--electric-blue);
+            padding: 1rem 3rem;
+            font-weight: 800;
+            font-size: 1.125rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Action Items */
+        .action-grid {
+            display: grid;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .action-group {
+            background: var(--pure-white);
+            border: 1px solid var(--light-gray);
+            padding: 1.5rem;
+        }
+
+        .action-group-title {
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 1rem;
+            font-size: 1.125rem;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+        }
+
+        .action-status {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .status-done {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-green);
+            border: 1px solid var(--success-green);
+        }
+
+        .status-progress {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-amber);
+            border: 1px solid var(--warning-amber);
+        }
+
+        .status-todo {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--blood-red);
+            border: 1px solid var(--blood-red);
+        }
+
+        /* Related Autopsies */
+        .related-section {
+            background: var(--light-gray);
+            padding: 2rem;
+            margin: 3rem -2rem;
+        }
+
+        .related-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .related-item {
+            background: var(--pure-white);
+            padding: 1rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .related-item:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow);
+        }
+
+        .related-icon {
+            font-size: 2rem;
+        }
+
+        .related-content {
+            flex: 1;
+        }
+
+        .related-title {
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 0.25rem;
+        }
+
+        .related-description {
+            font-size: 0.875rem;
+            color: var(--dark-gray);
+        }
+
+        /* Footer */
+        .newsletter-footer {
+            background: var(--black);
+            color: var(--pure-white);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 3rem -2rem -2rem -2rem;
+        }
+
+        .footer-cta {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .footer-links a {
+            color: var(--medium-gray);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--pure-white);
+        }
+
+        .footer-motto {
+            font-size: 0.875rem;
+            color: var(--medium-gray);
+            font-style: italic;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--dark-gray);
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 640px) {
+            .content-wrapper {
+                padding: 0 1.5rem 1.5rem;
+            }
+
+            .impact-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .evidence-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .big-reveal {
+                padding: 2rem 1.5rem;
+            }
+
+            .failure-title {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .newsletter-wrapper {
+                background: white;
+            }
+
+            .newsletter-container {
+                box-shadow: none;
+            }
+
+            .asset-cta,
+            .newsletter-footer {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="newsletter-wrapper">
+        <div class="newsletter-container">
+            <!-- Newsletter Header -->
+            <header class="newsletter-header">
+                <div class="logo">
+                    THE <span class="fix">FIX</span> LOOP
+                </div>
+                <div class="tagline">Ship Reliable Systems • Learn From Failure</div>
+            </header>
+
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Issue Badge -->
+                <div style="text-align: center;">
+                    <div class="issue-badge">Micro-Autopsy #001</div>
+                </div>
+
+                <!-- Hero Section -->
+                <div class="hero-section">
+                    <h1 class="failure-title">
+                        <span class="highlight">[System Component]</span> Catastrophic Failure:<br>
+                        [Describe What Went Spectacularly Wrong]
+                    </h1>
+                </div>
+
+                <!-- Impact Stats Bar -->
+                <div class="impact-bar">
+                    <div class="impact-stat">
+                        <div class="impact-number">[X]h</div>
+                        <div class="impact-label">Downtime</div>
+                    </div>
+                    <div class="impact-stat">
+                        <div class="impact-number">[X]k</div>
+                        <div class="impact-label">Users Hit</div>
+                    </div>
+                    <div class="impact-stat">
+                        <div class="impact-number">$[X]k</div>
+                        <div class="impact-label">Revenue Lost</div>
+                    </div>
+                    <div class="impact-stat">
+                        <div class="impact-number">[X]</div>
+                        <div class="impact-label">Engineers Paged</div>
+                    </div>
+                </div>
+
+                <!-- The Big Reveal -->
+                <div class="big-reveal">
+                    <div class="reveal-grid">
+                        <div class="reveal-item">
+                            <div class="reveal-label">What Actually Broke</div>
+                            <div class="reveal-content">
+                                [One powerful sentence describing the exact failure - be brutally specific]
+                            </div>
+                        </div>
+                        <div class="reveal-item">
+                            <div class="reveal-label">The Root Cause</div>
+                            <div class="reveal-content">
+                                [The real reason it happened - no sugar coating]
+                            </div>
+                        </div>
+                        <div class="reveal-item">
+                            <div class="reveal-label">The Fix That Worked</div>
+                            <div class="reveal-content">
+                                [Exactly what we did to fix it - actionable and specific]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAILSAFE Framework Analysis -->
+                <section class="failsafe-section">
+                    <h2 class="section-title">
+                        FAILSAFE Analysis
+                        <span class="badge">Framework</span>
+                    </h2>
+                    
+                    <div class="failsafe-grid">
+                        <div class="failsafe-card">
+                            <div class="failsafe-title">
+                                <span class="failsafe-letter">F</span>
+                                Failure Point
+                            </div>
+                            <div class="failsafe-content">
+                                [Exact module/service/line that failed. Be surgical with specificity.]
+                            </div>
+                        </div>
+
+                        <div class="failsafe-card">
+                            <div class="failsafe-title">
+                                <span class="failsafe-letter">A</span>
+                                Assumptions Violated
+                            </div>
+                            <div class="failsafe-content">
+                                [What we assumed that bit us. The dangerous "it should never happen" scenarios.]
+                            </div>
+                        </div>
+
+                        <div class="failsafe-card">
+                            <div class="failsafe-title">
+                                <span class="failsafe-letter">I</span>
+                                Inputs That Triggered
+                            </div>
+                            <div class="failsafe-content">
+                                [The exact conditions, data, or user actions that lit the fuse.]
+                            </div>
+                        </div>
+
+                        <div class="failsafe-card">
+                            <div class="failsafe-title">
+                                <span class="failsafe-letter">L</span>
+                                Loops & Cascades
+                            </div>
+                            <div class="failsafe-content">
+                                [How the failure spread. Retry storms, cascading timeouts, domino effects.]
+                            </div>
+                        </div>
+
+                        <div class="failsafe-card">
+                            <div class="failsafe-title">
+                                <span class="failsafe-letter">S</span>
+                                Safeguards Missing
+                            </div>
+                            <div class="failsafe-content">
+                                [The monitors, alerts, circuit breakers we didn't have but desperately needed.]
+                            </div>
+                        </div>
+
+                        <div class="failsafe-card">
+                            <div class="failsafe-title">
+                                <span class="failsafe-letter">A</span>
+                                A/B Test Opportunity
+                            </div>
+                            <div class="failsafe-content">
+                                [How we could have caught this with proper testing/experiments.]
+                            </div>
+                        </div>
+
+                        <div class="failsafe-card">
+                            <div class="failsafe-title">
+                                <span class="failsafe-letter">F</span>
+                                Fix Applied
+                            </div>
+                            <div class="failsafe-content">
+                                [The actual code/config change. No hand-waving, real implementation.]
+                            </div>
+                        </div>
+
+                        <div class="failsafe-card">
+                            <div class="failsafe-title">
+                                <span class="failsafe-letter">E</span>
+                                Evidence of Resolution
+                            </div>
+                            <div class="failsafe-content">
+                                [Graphs, metrics, logs proving it's actually fixed. Show the receipts.]
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Timeline -->
+                <section class="timeline-section">
+                    <h2 class="section-title">⏱️ How It Unfolded</h2>
+                    
+                    <div class="timeline-visual">
+                        <div class="timeline-line"></div>
+                        
+                        <div class="timeline-event">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-time">T-[X] days</div>
+                            <div class="timeline-description">The Seed of Destruction</div>
+                            <div class="timeline-detail">[What innocent-looking change planted the bomb]</div>
+                        </div>
+
+                        <div class="timeline-event">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-time">T+0</div>
+                            <div class="timeline-description">First Blood</div>
+                            <div class="timeline-detail">[Initial symptoms that everyone ignored]</div>
+                        </div>
+
+                        <div class="timeline-event">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-time">T+[X] min</div>
+                            <div class="timeline-description">All Hell Breaks Loose</div>
+                            <div class="timeline-detail">[When we realized this was bad]</div>
+                        </div>
+
+                        <div class="timeline-event">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-time">T+[X] hours</div>
+                            <div class="timeline-description">Root Cause Found</div>
+                            <div class="timeline-detail">[The "aha" moment when we found the culprit]</div>
+                        </div>
+
+                        <div class="timeline-event">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-time">T+[X] hours</div>
+                            <div class="timeline-description">Fix Deployed</div>
+                            <div class="timeline-detail">[When we pushed the fix and held our breath]</div>
+                        </div>
+
+                        <div class="timeline-event">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-time">T+[X] hours</div>
+                            <div class="timeline-description">Victory</div>
+                            <div class="timeline-detail">[Confirmed resolution, systems green]</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Code Comparison -->
+                <section>
+                    <h2 class="section-title">🔧 The Actual Code</h2>
+                    
+                    <div class="code-comparison">
+                        <div class="code-block broken">
+                            <div class="code-header">
+                                <span>❌ BROKEN CODE</span>
+                                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                            </div>
+                            <div class="code-content">
+                                <pre><code>// The code that caused the disaster
+[Insert actual problematic code]
+
+// Fatal flaw: [Explain what's wrong]</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="code-block fixed">
+                            <div class="code-header">
+                                <span>✅ FIXED CODE</span>
+                                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                            </div>
+                            <div class="code-content">
+                                <pre><code>// The fix that saved us
+[Insert corrected code]
+
+// Why this works: [Explain the fix]</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Evidence & Metrics -->
+                <section>
+                    <h2 class="section-title">📊 The Damage Report</h2>
+                    
+                    <div class="evidence-grid">
+                        <div class="evidence-card">
+                            <div class="evidence-metric">[X]%</div>
+                            <div class="evidence-label">Error Rate Spike</div>
+                        </div>
+                        <div class="evidence-card">
+                            <div class="evidence-metric">[X]ms</div>
+                            <div class="evidence-label">P99 Latency</div>
+                        </div>
+                        <div class="evidence-card">
+                            <div class="evidence-metric">[X]k</div>
+                            <div class="evidence-label">Failed Requests</div>
+                        </div>
+                        <div class="evidence-card">
+                            <div class="evidence-metric">[X]</div>
+                            <div class="evidence-label">Severity Score</div>
+                        </div>
+                    </div>
+
+                    <div class="code-block" style="margin-top: 2rem;">
+                        <div class="code-header">
+                            <span>📝 ACTUAL ERROR LOGS</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code>[Timestamp] ERROR: [Actual error from production]
+[Timestamp] PANIC: [The moment things went south]
+Stack trace: [Key parts of the stack trace]
+[More real logs that tell the story]</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Fix Implementation -->
+                <section>
+                    <h2 class="section-title">🚀 How To Fix This In Your System</h2>
+                    
+                    <div class="fix-steps">
+                        <div class="fix-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Detect The Vulnerability</div>
+                                <div class="step-description">[How to check if you have this problem]</div>
+                            </div>
+                        </div>
+                        <div class="fix-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Implement The Fix</div>
+                                <div class="step-description">[Exact steps to patch the issue]</div>
+                            </div>
+                        </div>
+                        <div class="fix-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Add Monitoring</div>
+                                <div class="step-description">[Specific alerts/metrics to add]</div>
+                            </div>
+                        </div>
+                        <div class="fix-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <div class="step-title">Test The Edge Case</div>
+                                <div class="step-description">[How to verify it won't happen again]</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Lessons Learned -->
+                <section>
+                    <h2 class="section-title">💡 Hard-Won Lessons</h2>
+                    
+                    <div class="lessons-box">
+                        <div class="lesson-item">
+                            <span class="lesson-icon">⚠️</span>
+                            <div class="lesson-text">
+                                <strong>Never trust [X]:</strong> [Specific thing that betrayed us and why]
+                            </div>
+                        </div>
+                        <div class="lesson-item">
+                            <span class="lesson-icon">⚠️</span>
+                            <div class="lesson-text">
+                                <strong>Always validate [Y]:</strong> [What we should have been checking]
+                            </div>
+                        </div>
+                        <div class="lesson-item">
+                            <span class="lesson-icon">⚠️</span>
+                            <div class="lesson-text">
+                                <strong>Monitor [Z] like your life depends on it:</strong> [Critical metric we missed]
+                            </div>
+                        </div>
+                        <div class="lesson-item">
+                            <span class="lesson-icon">⚠️</span>
+                            <div class="lesson-text">
+                                <strong>Test this edge case:</strong> [The specific scenario to add to test suites]
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Download Asset CTA -->
+                <div class="asset-cta">
+                    <h2 class="asset-title">🎁 Get The Battle-Tested Fix</h2>
+                    <p class="asset-description">
+                        Download our production-ready [checklist/script/config/monitor]<br>
+                        to prevent this failure in your system.
+                    </p>
+                    <a href="#" class="download-btn">Download [Asset Type] →</a>
+                </div>
+
+                <!-- Action Items -->
+                <section>
+                    <h2 class="section-title">✅ Action Items</h2>
+                    
+                    <div class="action-grid">
+                        <div class="action-group">
+                            <div class="action-group-title">✅ Immediate (Done)</div>
+                            <div class="action-item">
+                                <span class="action-status status-done">DONE</span>
+                                <span>[Patched the critical vulnerability]</span>
+                            </div>
+                            <div class="action-item">
+                                <span class="action-status status-done">DONE</span>
+                                <span>[Added monitoring for X metric]</span>
+                            </div>
+                            <div class="action-item">
+                                <span class="action-status status-done">DONE</span>
+                                <span>[Updated runbooks with fix]</span>
+                            </div>
+                        </div>
+
+                        <div class="action-group">
+                            <div class="action-group-title">🔄 This Sprint</div>
+                            <div class="action-item">
+                                <span class="action-status status-progress">WIP</span>
+                                <span>[Add comprehensive test coverage]</span>
+                            </div>
+                            <div class="action-item">
+                                <span class="action-status status-progress">WIP</span>
+                                <span>[Implement circuit breaker]</span>
+                            </div>
+                        </div>
+
+                        <div class="action-group">
+                            <div class="action-group-title">📅 Next Quarter</div>
+                            <div class="action-item">
+                                <span class="action-status status-todo">TODO</span>
+                                <span>[Refactor to prevent entire class of issues]</span>
+                            </div>
+                            <div class="action-item">
+                                <span class="action-status status-todo">TODO</span>
+                                <span>[Build chaos testing for this scenario]</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Related Autopsies -->
+                <div class="related-section">
+                    <h2 class="section-title">🔗 Similar War Stories</h2>
+                    
+                    <div class="related-grid">
+                        <a href="#" class="related-item">
+                            <span class="related-icon">💀</span>
+                            <div class="related-content">
+                                <div class="related-title">Micro-Autopsy #[X]: [Related Failure]</div>
+                                <div class="related-description">[Brief description of similar issue]</div>
+                            </div>
+                        </a>
+                        <a href="#" class="related-item">
+                            <span class="related-icon">🔥</span>
+                            <div class="related-content">
+                                <div class="related-title">Micro-Autopsy #[Y]: [Another Related Failure]</div>
+                                <div class="related-description">[How this connects to current issue]</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Newsletter Footer -->
+            <footer class="newsletter-footer">
+                <div class="footer-cta">
+                    Don't Let This Happen To You
+                </div>
+                <p style="color: var(--medium-gray); margin-bottom: 2rem;">
+                    Join [X]k engineers getting battle-tested fixes every week
+                </p>
+                <div class="footer-links">
+                    <a href="#">Subscribe</a>
+                    <a href="#">Archive</a>
+                    <a href="#">FAILSAFE Framework</a>
+                    <a href="#">Submit Your Failure</a>
+                </div>
+                <div class="footer-motto">
+                    "Every failure is data. Every fix is knowledge. Every safeguard is wisdom."<br>
+                    <strong style="color: var(--pure-white);">Ship reliable systems. Learn from failure.</strong>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.closest('.code-block').querySelector('code');
+            navigator.clipboard.writeText(codeBlock.textContent);
+            const originalText = button.textContent;
+            button.textContent = 'COPIED!';
+            button.style.background = '#10B981';
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

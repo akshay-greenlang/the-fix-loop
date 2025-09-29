@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>The Fix Loop | Micro-Autopsy #001</title>
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+    <style type="text/css">
+        /* Email Client Reset */
+        #outlook a { padding: 0; }
+        body { margin: 0 !important; padding: 0 !important; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; -webkit-font-smoothing: antialiased !important; }
+        table, td { border-collapse: collapse !important; mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important; }
+        img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+        p { margin: 0 !important; }
+
+        /* Mobile Styles */
+        @media screen and (max-width: 600px) {
+            .mobile-hide { display: none !important; }
+            .mobile-center { text-align: center !important; }
+            .container { width: 100% !important; max-width: 100% !important; }
+            .mobile-padding { padding-left: 20px !important; padding-right: 20px !important; }
+            .impact-stat { display: block !important; width: 100% !important; }
+            .two-column td { display: block !important; width: 100% !important; }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #FAFAFA; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;">
+
+    <!-- Email Wrapper -->
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #FAFAFA;">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+
+                <!-- Main Container -->
+                <table class="container" role="presentation" cellpadding="0" cellspacing="0" width="600" style="background-color: #FFFFFF; max-width: 600px;">
+
+                    <!-- Header -->
+                    <tr>
+                        <td style="background-color: #000000; padding: 32px 40px; text-align: center;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <h1 style="margin: 0; font-size: 24px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.5px;">
+                                            THE <span style="color: #DC2626;">FIX</span> LOOP
+                                        </h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-top: 8px; text-align: center;">
+                                        <p style="margin: 0; font-size: 12px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 2px;">
+                                            Ship Reliable Systems • Learn From Failure
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Issue Badge -->
+                    <tr>
+                        <td style="padding: 24px 40px; text-align: center;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="display: inline-block;">
+                                <tr>
+                                    <td style="background-color: #DC2626; padding: 8px 24px;">
+                                        <span style="color: #FFFFFF; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">
+                                            Micro-Autopsy #001
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Title/Hook Section -->
+                    <tr>
+                        <td class="mobile-padding" style="padding: 0 40px 24px 40px;">
+                            <h2 style="margin: 0 0 16px 0; font-size: 28px; font-weight: 900; color: #000000; line-height: 1.2; text-align: center;">
+                                <span style="color: #DC2626;">[Component]</span> failed because <span style="color: #DC2626;">[cause]</span>, costing [impact]
+                            </h2>
+                            <p style="margin: 0; font-size: 16px; color: #374151; text-align: center; line-height: 1.5;">
+                                Here's the minimal fix you can ship today.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Impact Stats Bar -->
+                    <tr>
+                        <td style="padding: 0;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F3F4F6;">
+                                <tr>
+                                    <td style="padding: 1px;">
+                                        <table role="presentation" cellpadding="0" cellspacing="1" width="100%">
+                                            <tr>
+                                                <td class="impact-stat" width="25%" style="background-color: #FFFFFF; padding: 20px; text-align: center;">
+                                                    <div style="font-size: 28px; font-weight: 900; color: #DC2626; line-height: 1;">[X]h</div>
+                                                    <div style="font-size: 11px; color: #9CA3AF; text-transform: uppercase; margin-top: 4px;">Downtime</div>
+                                                </td>
+                                                <td class="impact-stat" width="25%" style="background-color: #FFFFFF; padding: 20px; text-align: center;">
+                                                    <div style="font-size: 28px; font-weight: 900; color: #DC2626; line-height: 1;">[X]k</div>
+                                                    <div style="font-size: 11px; color: #9CA3AF; text-transform: uppercase; margin-top: 4px;">Users Hit</div>
+                                                </td>
+                                                <td class="impact-stat" width="25%" style="background-color: #FFFFFF; padding: 20px; text-align: center;">
+                                                    <div style="font-size: 28px; font-weight: 900; color: #DC2626; line-height: 1;">$[X]k</div>
+                                                    <div style="font-size: 11px; color: #9CA3AF; text-transform: uppercase; margin-top: 4px;">Revenue Lost</div>
+                                                </td>
+                                                <td class="impact-stat" width="25%" style="background-color: #FFFFFF; padding: 20px; text-align: center;">
+                                                    <div style="font-size: 28px; font-weight: 900; color: #DC2626; line-height: 1;">[X]</div>
+                                                    <div style="font-size: 11px; color: #9CA3AF; text-transform: uppercase; margin-top: 4px;">Score</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Failure Snapshot -->
+                    <tr>
+                        <td class="mobile-padding" style="padding: 32px 40px 24px 40px;">
+                            <h3 style="margin: 0 0 12px 0; font-size: 20px; font-weight: 800; color: #000000;">
+                                📸 Failure Snapshot
+                            </h3>
+                            <p style="margin: 0; font-size: 15px; color: #374151; line-height: 1.6;">
+                                [What users/operators saw; the exact symptom; one number (error rate/latency/$$). Include time window, scope, severity. No theories, just facts. 60-100 words describing what actually happened when the system failed.]
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- FAILSAFE Framework Section -->
+                    <tr>
+                        <td class="mobile-padding" style="padding: 24px 40px;">
+                            <h3 style="margin: 0 0 20px 0; font-size: 20px; font-weight: 800; color: #000000;">
+                                🔍 Root Cause (FAILSAFE Analysis)
+                            </h3>
+
+                            <!-- FAILSAFE Cards -->
+                            <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                                <!-- F - Failure -->
+                                <tr>
+                                    <td style="padding-bottom: 12px;">
+                                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                                            <tr>
+                                                <td style="padding: 16px;">
+                                                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                                                        <tr>
+                                                            <td width="32" valign="top">
+                                                                <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">F</div>
+                                                            </td>
+                                                            <td style="padding-left: 12px;">
+                                                                <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Failure</div>
+                                                                <div style="font-size: 14px; color: #374151; line-height: 1.4;">[Exact module/line/signal that broke]</div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- A - Assumptions -->
+                                <tr>
+                                    <td style="padding-bottom: 12px;">
+                                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                                            <tr>
+                                                <td style="padding: 16px;">
+                                                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                                                        <tr>
+                                                            <td width="32" valign="top">
+                                                                <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">A</div>
+                                                            </td>
+                                                            <td style="padding-left: 12px;">
+                                                                <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Assumptions</div>
+                                                                <div style="font-size: 14px; color: #374151; line-height: 1.4;">[The invariant that wasn't true]</div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- I - Inputs -->
+                                <tr>
+                                    <td style="padding-bottom: 12px;">
+                                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                                            <tr>
+                                                <td style="padding: 16px;">
+                                                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                                                        <tr>
+                                                            <td width="32" valign="top">
+                                                                <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">I</div>
+                                                            </td>
+                                                            <td style="padding-left: 12px;">
+                                                                <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Inputs</div>
+                                                                <div style="font-size: 14px; color: #374151; line-height: 1.4;">[The data/request that triggered it]</div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- L - Loops -->
+                                <tr>
+                                    <td style="padding-bottom: 12px;">
+                                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                                            <tr>
+                                                <td style="padding: 16px;">
+                                                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                                                        <tr>
+                                                            <td width="32" valign="top">
+                                                                <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">L</div>
+                                                            </td>
+                                                            <td style="padding-left: 12px;">
+                                                                <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Loops</div>
+                                                                <div style="font-size: 14px; color: #374151; line-height: 1.4;">[Cascades (retries, timeouts, rate limits)]</div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- S - Safeguards -->
+                                <tr>
+                                    <td style="padding-bottom: 12px;">
+                                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                                            <tr>
+                                                <td style="padding: 16px;">
+                                                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                                                        <tr>
+                                                            <td width="32" valign="top">
+                                                                <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">S</div>
+                                                            </td>
+                                                            <td style="padding-left: 12px;">
+                                                                <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Safeguards</div>
+                                                                <div style="font-size: 14px; color: #374151; line-height: 1.4;">[Missing/weak (validation, policies, breakers)]</div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                                <!-- E - Experiments -->
+                                <tr>
+                                    <td style="padding-bottom: 12px;">
+                                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                                            <tr>
+                                                <td style="padding: 16px;">
+                                                    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                                                        <tr>
+                                                            <td width="32" valign="top">
+                                                                <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">E</div>
+                                                            </td>
+                                                            <td style="padding-left: 12px;">
+                                                                <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Experiments</div>
+                                                                <div style="font-size: 14px; color: #374151; line-height: 1.4;">[Minimal test that confirmed the diagnosis]</div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Fix Implementation Steps -->
+                    <tr>
+                        <td class="mobile-padding" style="padding: 24px 40px;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background: linear-gradient(135deg, #10B981 0%, #3B82F6 100%); background-color: #10B981;">
+                                <tr>
+                                    <td style="padding: 24px;">
+                                        <h3 style="margin: 0 0 20px 0; font-size: 20px; font-weight: 800; color: #FFFFFF;">
+                                            🚀 The Fix (3-7 Steps)
+                                        </h3>
+
+                                        <!-- Step 1 -->
+                                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
+                                            <tr>
+                                                <td width="32" valign="top">
+                                                    <div style="width: 28px; height: 28px; background-color: #FFFFFF; text-align: center; line-height: 28px; color: #10B981; font-weight: 900; font-size: 16px; border-radius: 50%;">1</div>
+                                                </td>
+                                                <td style="padding-left: 12px;">
+                                                    <div style="color: #FFFFFF; font-weight: 700; margin-bottom: 4px;">Add guardrail/check</div>
+                                                    <div style="color: #FFFFFF; font-size: 14px; opacity: 0.95;">[Code/config snippet - exact implementation]</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <!-- Step 2 -->
+                                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
+                                            <tr>
+                                                <td width="32" valign="top">
+                                                    <div style="width: 28px; height: 28px; background-color: #FFFFFF; text-align: center; line-height: 28px; color: #10B981; font-weight: 900; font-size: 16px; border-radius: 50%;">2</div>
+                                                </td>
+                                                <td style="padding-left: 12px;">
+                                                    <div style="color: #FFFFFF; font-weight: 700; margin-bottom: 4px;">Change system behavior</div>
+                                                    <div style="color: #FFFFFF; font-size: 14px; opacity: 0.95;">[Fallback/timeout/retry logic adjustment]</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <!-- Step 3 -->
+                                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
+                                            <tr>
+                                                <td width="32" valign="top">
+                                                    <div style="width: 28px; height: 28px; background-color: #FFFFFF; text-align: center; line-height: 28px; color: #10B981; font-weight: 900; font-size: 16px; border-radius: 50%;">3</div>
+                                                </td>
+                                                <td style="padding-left: 12px;">
+                                                    <div style="color: #FFFFFF; font-weight: 700; margin-bottom: 4px;">Validate locally/CI</div>
+                                                    <div style="color: #FFFFFF; font-size: 14px; opacity: 0.95;">[How to test the fix before deployment]</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <!-- Step 4 -->
+                                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
+                                            <tr>
+                                                <td width="32" valign="top">
+                                                    <div style="width: 28px; height: 28px; background-color: #FFFFFF; text-align: center; line-height: 28px; color: #10B981; font-weight: 900; font-size: 16px; border-radius: 50%;">4</div>
+                                                </td>
+                                                <td style="padding-left: 12px;">
+                                                    <div style="color: #FFFFFF; font-weight: 700; margin-bottom: 4px;">Rollout (canary, alerts)</div>
+                                                    <div style="color: #FFFFFF; font-size: 14px; opacity: 0.95;">[Deployment strategy and safety checks]</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <!-- Step 5 -->
+                                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                                            <tr>
+                                                <td width="32" valign="top">
+                                                    <div style="width: 28px; height: 28px; background-color: #FFFFFF; text-align: center; line-height: 28px; color: #10B981; font-weight: 900; font-size: 16px; border-radius: 50%;">5</div>
+                                                </td>
+                                                <td style="padding-left: 12px;">
+                                                    <div style="color: #FFFFFF; font-weight: 700; margin-bottom: 4px;">Monitor (dashboards/thresholds)</div>
+                                                    <div style="color: #FFFFFF; font-size: 14px; opacity: 0.95;">[Which metrics to watch post-deployment]</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <p style="margin: 20px 0 0 0; color: #FFFFFF; font-size: 13px; font-style: italic;">
+                                            Rule: Every step must be testable and reversible. Prefer smallest change that works.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Checklist / Asset -->
+                    <tr>
+                        <td class="mobile-padding" style="padding: 24px 40px;">
+                            <h3 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 800; color: #000000;">
+                                ✅ Checklist / Asset
+                            </h3>
+                            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F3F4F6; padding: 16px;">
+                                <tr>
+                                    <td>
+                                        <p style="margin: 0 0 8px 0; font-size: 15px; color: #374151;">
+                                            ☐ [Action 1 - specific check or implementation step]
+                                        </p>
+                                        <p style="margin: 0 0 8px 0; font-size: 15px; color: #374151;">
+                                            ☐ [Action 2 - validation or monitoring setup]
+                                        </p>
+                                        <p style="margin: 0 0 8px 0; font-size: 15px; color: #374151;">
+                                            ☐ [Action 3 - deployment verification]
+                                        </p>
+                                        <p style="margin: 0; font-size: 15px; color: #374151;">
+                                            ☐ [Action 4 - post-deployment check]
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="margin: 12px 0 0 0; font-size: 13px; color: #9CA3AF;">
+                                Asset: <a href="#" style="color: #3B82F6; text-decoration: underline;">[slug]-asset-v1.0.pdf</a>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Metric to Watch -->
+                    <tr>
+                        <td class="mobile-padding" style="padding: 0 40px 24px 40px;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border: 2px solid #DC2626; padding: 16px; text-align: center;">
+                                <tr>
+                                    <td>
+                                        <div style="font-size: 14px; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Metric to Watch</div>
+                                        <div style="font-size: 18px; font-weight: 900; color: #000000;">
+                                            [metric_name] — target [value]
+                                        </div>
+                                        <div style="font-size: 13px; color: #374151; margin-top: 4px;">
+                                            measured as [formula/window]
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- References -->
+                    <tr>
+                        <td class="mobile-padding" style="padding: 0 40px 24px 40px;">
+                            <h4 style="margin: 0 0 8px 0; font-size: 14px; font-weight: 700; color: #000000; text-transform: uppercase;">
+                                📚 References
+                            </h4>
+                            <p style="margin: 0 0 4px 0; font-size: 14px; color: #374151;">
+                                • [Primary source 1 - documentation/spec/repo]
+                            </p>
+                            <p style="margin: 0 0 4px 0; font-size: 14px; color: #374151;">
+                                • [Primary source 2 - technical reference]
+                            </p>
+                            <p style="margin: 0; font-size: 14px; color: #374151;">
+                                • Internal: /evidence/[slug]/
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- CTA Section -->
+                    <tr>
+                        <td style="padding: 0;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background: linear-gradient(135deg, #3B82F6 0%, #1F2937 100%); background-color: #3B82F6;">
+                                <tr>
+                                    <td style="padding: 48px 40px; text-align: center;">
+                                        <h2 style="margin: 0 0 20px 0; font-size: 28px; font-weight: 900; color: #FFFFFF; letter-spacing: -0.5px;">
+                                            🎁 Get The Battle-Tested Fix
+                                        </h2>
+                                        <p style="margin: 0 0 32px 0; font-size: 16px; color: #FFFFFF; opacity: 0.95; line-height: 1.6;">
+                                            Download our production-ready checklist<br>
+                                            to prevent this failure in your system.
+                                        </p>
+
+                                        <!--[if mso]>
+                                        <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:52px;v-text-anchor:middle;width:260px;" arcsize="10%" stroke="f" fillcolor="#FFFFFF">
+                                        <w:anchorlock/>
+                                        <center>
+                                        <![endif]-->
+                                        <a href="#" style="background-color: #FFFFFF; color: #3B82F6; display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 52px; text-align: center; text-decoration: none; width: 260px; -webkit-text-size-adjust: none; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                                            Download Asset →
+                                        </a>
+                                        <!--[if mso]>
+                                        </center>
+                                        </v:roundrect>
+                                        <![endif]-->
+
+                                        <p style="margin: 36px 0 0 0; font-size: 14px; color: #FFFFFF; font-style: italic; opacity: 0.9;">
+                                            💬 Reply with your #1 failure in [topic] →
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #000000; padding: 48px 40px; text-align: center;">
+                            <p style="margin: 0 0 20px 0; font-size: 20px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.3px;">
+                                Don't Let This Happen To You
+                            </p>
+                            <p style="margin: 0 0 32px 0; font-size: 15px; color: #9CA3AF; line-height: 1.5;">
+                                Join [X]k engineers getting battle-tested fixes every week
+                            </p>
+
+                            <!-- Footer Links -->
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 32px auto;">
+                                <tr>
+                                    <td style="padding: 0 16px;">
+                                        <a href="#" style="color: #DC2626; text-decoration: none; font-size: 14px; font-weight: 600;">Subscribe</a>
+                                    </td>
+                                    <td style="color: #374151;">•</td>
+                                    <td style="padding: 0 16px;">
+                                        <a href="#" style="color: #9CA3AF; text-decoration: none; font-size: 14px;">Archive</a>
+                                    </td>
+                                    <td style="color: #374151;">•</td>
+                                    <td style="padding: 0 16px;">
+                                        <a href="#" style="color: #9CA3AF; text-decoration: none; font-size: 14px;">FAILSAFE</a>
+                                    </td>
+                                    <td style="color: #374151;">•</td>
+                                    <td style="padding: 0 16px;">
+                                        <a href="#" style="color: #9CA3AF; text-decoration: none; font-size: 14px;">Submit</a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Motto Section -->
+                            <div style="margin-top: 32px; padding-top: 32px; border-top: 1px solid #374151;">
+                                <p style="margin: 0 0 12px 0; font-size: 14px; color: #9CA3AF; font-style: italic; line-height: 1.6;">
+                                    "Every failure is data. Every fix is knowledge. Every safeguard is wisdom."
+                                </p>
+                                <p style="margin: 0; font-size: 15px; color: #FFFFFF; font-weight: 700; letter-spacing: 0.5px;">
+                                    Ship reliable systems. Learn from failure.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <!-- End Main Container -->
+
+            </td>
+        </tr>
+    </table>
+    <!-- End Email Wrapper -->
+
+</body>
+</html>

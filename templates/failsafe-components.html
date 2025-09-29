@@ -1,0 +1,337 @@
+<!-- FAILSAFE Email-Safe Components for The Fix Loop -->
+<!-- Copy and paste these components into your Beehiiv templates -->
+
+<!-- ============================================ -->
+<!-- COMPONENT: FAILSAFE Card Template -->
+<!-- ============================================ -->
+<!--
+Usage: Copy this structure for each FAILSAFE letter.
+Replace:
+- [LETTER] with F, A, I, L, S, or E
+- [TITLE] with the component name
+- [CONTENT] with the description
+-->
+
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6; margin-bottom: 12px;">
+    <tr>
+        <td style="padding: 16px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td width="32" valign="top">
+                        <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">[LETTER]</div>
+                    </td>
+                    <td style="padding-left: 12px;">
+                        <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">[TITLE]</div>
+                        <div style="font-size: 14px; color: #374151; line-height: 1.4;">[CONTENT]</div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- ============================================ -->
+<!-- COMPLETE FAILSAFE FRAMEWORK (All 6 Components) -->
+<!-- ============================================ -->
+
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+    <!-- F - Failure -->
+    <tr>
+        <td style="padding-bottom: 12px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                <tr>
+                    <td style="padding: 16px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td width="32" valign="top">
+                                    <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">F</div>
+                                </td>
+                                <td style="padding-left: 12px;">
+                                    <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Failure</div>
+                                    <div style="font-size: 14px; color: #374151; line-height: 1.4;">Exact module/line/signal that broke. Be surgical with specificity.</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <!-- A - Assumptions -->
+    <tr>
+        <td style="padding-bottom: 12px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                <tr>
+                    <td style="padding: 16px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td width="32" valign="top">
+                                    <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">A</div>
+                                </td>
+                                <td style="padding-left: 12px;">
+                                    <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Assumptions</div>
+                                    <div style="font-size: 14px; color: #374151; line-height: 1.4;">The invariant that wasn't true.</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <!-- I - Inputs -->
+    <tr>
+        <td style="padding-bottom: 12px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                <tr>
+                    <td style="padding: 16px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td width="32" valign="top">
+                                    <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">I</div>
+                                </td>
+                                <td style="padding-left: 12px;">
+                                    <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Inputs</div>
+                                    <div style="font-size: 14px; color: #374151; line-height: 1.4;">The data/request that triggered it.</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <!-- L - Loops -->
+    <tr>
+        <td style="padding-bottom: 12px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                <tr>
+                    <td style="padding: 16px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td width="32" valign="top">
+                                    <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">L</div>
+                                </td>
+                                <td style="padding-left: 12px;">
+                                    <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Loops</div>
+                                    <div style="font-size: 14px; color: #374151; line-height: 1.4;">Cascades (retries, timeouts, rate limits).</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <!-- S - Safeguards -->
+    <tr>
+        <td style="padding-bottom: 12px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                <tr>
+                    <td style="padding: 16px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td width="32" valign="top">
+                                    <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">S</div>
+                                </td>
+                                <td style="padding-left: 12px;">
+                                    <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Safeguards</div>
+                                    <div style="font-size: 14px; color: #374151; line-height: 1.4;">Missing/weak (validation, policies, breakers).</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    <!-- E - Experiments -->
+    <tr>
+        <td style="padding-bottom: 12px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-left: 4px solid #3B82F6; background-color: #F3F4F6;">
+                <tr>
+                    <td style="padding: 16px;">
+                        <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <td width="32" valign="top">
+                                    <div style="width: 28px; height: 28px; background-color: #3B82F6; text-align: center; line-height: 28px; color: #FFFFFF; font-weight: 900; font-size: 16px;">E</div>
+                                </td>
+                                <td style="padding-left: 12px;">
+                                    <div style="font-weight: 700; color: #000000; margin-bottom: 4px;">Experiments</div>
+                                    <div style="font-size: 14px; color: #374151; line-height: 1.4;">Minimal test that confirmed the diagnosis.</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- ============================================ -->
+<!-- COMPONENT: Impact Stats Bar -->
+<!-- ============================================ -->
+
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F3F4F6;">
+    <tr>
+        <td style="padding: 1px;">
+            <table role="presentation" cellpadding="0" cellspacing="1" width="100%">
+                <tr>
+                    <td width="25%" style="background-color: #FFFFFF; padding: 20px; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 900; color: #DC2626; line-height: 1;">[X]h</div>
+                        <div style="font-size: 11px; color: #9CA3AF; text-transform: uppercase; margin-top: 4px;">Downtime</div>
+                    </td>
+                    <td width="25%" style="background-color: #FFFFFF; padding: 20px; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 900; color: #DC2626; line-height: 1;">[X]k</div>
+                        <div style="font-size: 11px; color: #9CA3AF; text-transform: uppercase; margin-top: 4px;">Users Hit</div>
+                    </td>
+                    <td width="25%" style="background-color: #FFFFFF; padding: 20px; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 900; color: #DC2626; line-height: 1;">$[X]k</div>
+                        <div style="font-size: 11px; color: #9CA3AF; text-transform: uppercase; margin-top: 4px;">Revenue Lost</div>
+                    </td>
+                    <td width="25%" style="background-color: #FFFFFF; padding: 20px; text-align: center;">
+                        <div style="font-size: 28px; font-weight: 900; color: #DC2626; line-height: 1;">[X]</div>
+                        <div style="font-size: 11px; color: #9CA3AF; text-transform: uppercase; margin-top: 4px;">Score</div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<!-- ============================================ -->
+<!-- COMPONENT: Fix Step Template -->
+<!-- ============================================ -->
+
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 16px;">
+    <tr>
+        <td width="32" valign="top">
+            <div style="width: 28px; height: 28px; background-color: #FFFFFF; text-align: center; line-height: 28px; color: #10B981; font-weight: 900; font-size: 16px; border-radius: 50%;">[N]</div>
+        </td>
+        <td style="padding-left: 12px;">
+            <div style="color: #FFFFFF; font-weight: 700; margin-bottom: 4px;">[Step Title]</div>
+            <div style="color: #FFFFFF; font-size: 14px; opacity: 0.95;">[Step Description]</div>
+        </td>
+    </tr>
+</table>
+
+<!-- ============================================ -->
+<!-- COMPONENT: Metric to Watch Box -->
+<!-- ============================================ -->
+
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border: 2px solid #DC2626; padding: 16px; text-align: center;">
+    <tr>
+        <td>
+            <div style="font-size: 14px; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Metric to Watch</div>
+            <div style="font-size: 18px; font-weight: 900; color: #000000;">
+                [metric_name] — target [value]
+            </div>
+            <div style="font-size: 13px; color: #374151; margin-top: 4px;">
+                measured as [formula/window]
+            </div>
+        </td>
+    </tr>
+</table>
+
+<!-- ============================================ -->
+<!-- COMPONENT: CTA Button (Email-Safe) -->
+<!-- ============================================ -->
+
+<!--[if mso]>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="[URL]" style="height:48px;v-text-anchor:middle;width:250px;" arcsize="10%" stroke="f" fillcolor="#FFFFFF">
+<w:anchorlock/>
+<center>
+<![endif]-->
+<a href="[URL]" style="background-color: #FFFFFF; color: #3B82F6; display: inline-block; font-family: Arial, sans-serif; font-size: 16px; font-weight: 800; line-height: 48px; text-align: center; text-decoration: none; width: 250px; -webkit-text-size-adjust: none; text-transform: uppercase; letter-spacing: 0.5px;">
+    [CTA TEXT] →
+</a>
+<!--[if mso]>
+</center>
+</v:roundrect>
+<![endif]-->
+
+<!-- ============================================ -->
+<!-- COMPONENT: Section Header -->
+<!-- ============================================ -->
+
+<h3 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 800; color: #000000;">
+    [EMOJI] [Section Title]
+</h3>
+
+<!-- ============================================ -->
+<!-- COMPONENT: Checklist Box -->
+<!-- ============================================ -->
+
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #F3F4F6; padding: 16px;">
+    <tr>
+        <td>
+            <p style="margin: 0 0 8px 0; font-size: 15px; color: #374151;">
+                ☐ [Action 1]
+            </p>
+            <p style="margin: 0 0 8px 0; font-size: 15px; color: #374151;">
+                ☐ [Action 2]
+            </p>
+            <p style="margin: 0 0 8px 0; font-size: 15px; color: #374151;">
+                ☐ [Action 3]
+            </p>
+            <p style="margin: 0; font-size: 15px; color: #374151;">
+                ☐ [Action 4]
+            </p>
+        </td>
+    </tr>
+</table>
+
+<!-- ============================================ -->
+<!-- COMPONENT: Code Block (Simple, Email-Safe) -->
+<!-- ============================================ -->
+
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #0F172A; padding: 16px; margin: 16px 0;">
+    <tr>
+        <td>
+            <pre style="margin: 0; font-family: 'Courier New', monospace; font-size: 13px; color: #E5E7EB; line-height: 1.5; white-space: pre-wrap; word-wrap: break-word;">
+[Code snippet here]
+# Comment explaining the code
+variable = "value"
+function_call(parameter)
+            </pre>
+        </td>
+    </tr>
+</table>
+
+<!-- ============================================ -->
+<!-- NOTES FOR BEEHIIV INTEGRATION -->
+<!-- ============================================ -->
+<!--
+1. SIZE OPTIMIZATION:
+   - Remove all comments before sending
+   - Minimize whitespace between tags
+   - Use short hex colors (#FFF instead of #FFFFFF where possible)
+   - Combine inline styles where practical
+
+2. BEEHIIV VARIABLES:
+   Replace these placeholders with Beehiiv merge tags:
+   - [subscriber_name] → {{ subscriber.first_name }}
+   - [issue_number] → Custom field
+   - [unsubscribe_url] → {{ unsubscribe_url }}
+
+3. TESTING CHECKLIST:
+   - Gmail Web ✓
+   - Gmail Mobile (iOS/Android) ✓
+   - Outlook 2016/2019 ✓
+   - Outlook 365 ✓
+   - Apple Mail (Desktop/iOS) ✓
+   - Yahoo Mail ✓
+   - Size under 102KB ✓
+
+4. COMMON ISSUES & FIXES:
+   - Outlook spacing: Use cellpadding/cellspacing, not margins
+   - Gmail clipping: Keep total size under 102KB
+   - Mobile scaling: Use max-width: 600px with width: 100%
+   - Dark mode: Test with transparent images
+-->
